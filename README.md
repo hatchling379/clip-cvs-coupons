@@ -1,0 +1,1 @@
+[Sign in at CVS.com](https://www.cvs.com/account/login) and visit the [ExtraCare Savings page](https://www.cvs.com/extracare/home). As soon as the page is fully loaded, the script scrolls down to load the coupons then rapidly clicks the "Send to card" button for each coupon.
