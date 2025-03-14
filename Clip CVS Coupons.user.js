@@ -37,7 +37,8 @@ async function scrollToShowCoupons() {
   const couponCountLabel = document.getElementById(COUPON_COUNT).textContent;
   const couponCount = parseInt(couponCountLabel.match(/(\d+)\s+coupons/)[1]);
   while (document.querySelectorAll(COUPON).length < couponCount) {
-    const lastCoupon = document.querySelector(COUPON + ':last-of-type');
+    const coupons = document.querySelectorAll(COUPON);
+    const lastCoupon = coupons[coupons.length - 1];
     lastCoupon.scrollIntoView({ block: 'center' });
     await delay(SCROLL_INTERVAL);
   }
