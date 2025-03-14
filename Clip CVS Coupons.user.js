@@ -2,7 +2,7 @@
 // @name          Clip CVS Coupons
 // @include       https://www.cvs.com/extracare/home*
 // @description   Automatically send all CVS deals to card
-// @version       2.0.0
+// @version       2.0.1
 // @namespace     hatchling379
 // @license       MIT
 // ==/UserScript==
