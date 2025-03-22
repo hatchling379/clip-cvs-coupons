@@ -2,7 +2,7 @@
 // @name          Clip CVS Coupons
 // @include       https://www.cvs.com/extracare/home*
 // @description   Automatically send all CVS deals to card
-// @version       2.0.1
+// @version       2.1.0
 // @namespace     hatchling379
 // @license       MIT
 // ==/UserScript==
@@ -13,9 +13,11 @@ const SCROLL_INTERVAL = 100;
 const CLICK_INTERVAL = 20;
 
 // CSS Selectors
-const COUPONS_CONTAINER = 'extracare-all-coupons';
-const COUPON_COUNT = 'cpnCount';
-const COUPON = 'cvs-coupon-container';
+const COUPONS_CONTAINER = '.ps-tab';
+const TAB_ALL = '.ps-tab[label="All"]';
+const TAB_ON_CARD = '.ps-tab[label="On card"]';
+const SORT_BUTTON = '#openSortButton';
+const COUPON = '[data-testid="coupon"]';
 const SEND_TO_CARD = 'send-to-card-action > button';
 
 // Main script function
@@ -34,10 +36,11 @@ async function waitForPageLoad() {
 
 // Scroll to load all coupons
 async function scrollToShowCoupons() {
-  const couponCountLabel = document.getElementById(COUPON_COUNT).textContent;
-  const couponCount = parseInt(couponCountLabel.match(/(\d+)\s+coupons/)[1]);
-  while (document.querySelectorAll(COUPON).length < couponCount) {
-    const coupons = document.querySelectorAll(COUPON);
+  const couponCountAll = parseInt(document.querySelector(TAB_ALL + ' ' + SORT_BUTTON).nextElementSibling.textContent);
+  const couponCountOnCard = parseInt(document.querySelector(TAB_ON_CARD + ' ' + SORT_BUTTON).nextElementSibling.textContent);
+  const couponCount = couponCountAll - couponCountOnCard;
+  while (document.querySelectorAll(SEND_TO_CARD).length < couponCount) {
+    const coupons = document.querySelectorAll(TAB_ALL + ' ' + COUPON);
     const lastCoupon = coupons[coupons.length - 1];
     lastCoupon.scrollIntoView({ block: 'center' });
     await delay(SCROLL_INTERVAL);
@@ -49,8 +52,10 @@ async function sendAllCouponsToCard() {
   const sendButtons = document.querySelectorAll(SEND_TO_CARD);
   for (let i = sendButtons.length - 1; i >= 0; i--) {
     const sendButton = sendButtons[i];
-    sendButton.closest(COUPON).scrollIntoView({ block: 'center' });
     sendButton.click();
+    if (i > 0) {
+      sendButtons[i - 1].closest(COUPON).scrollIntoView({ block: 'center' });
+    }
     await delay(CLICK_INTERVAL);
   }
 }
